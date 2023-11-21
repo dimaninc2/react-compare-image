@@ -9,11 +9,13 @@ interface IProps {
   leftImageAlt?: string;
   leftImageCss?: object;
   leftImageLabel?: string;
+  leftImageLayerAbove?: React.ReactNode;
   onSliderPositionChange?: (position: number) => void;
   rightImage: string;
   rightImageAlt?: string;
   rightImageCss?: object;
   rightImageLabel?: string;
+  rightImageLayerAbove?: React.ReactNode;
   skeleton?: React.ReactNode;
   sliderLineColor?: string;
   sliderLineWidth?: number;
@@ -31,11 +33,13 @@ const ReactCompareImage: React.FC<IProps> = (props: IProps) => {
     leftImageAlt = '',
     leftImageCss = {},
     leftImageLabel = null,
+    leftImageLayerAbove = null,
     onSliderPositionChange = () => {},
     rightImage,
     rightImageAlt = '',
     rightImageCss = {},
     rightImageLabel = null,
+    rightImageLayerAbove = null,
     skeleton = null,
     sliderLineColor = '#ffffff',
     sliderLineWidth = 2,
@@ -230,10 +234,21 @@ const ReactCompareImage: React.FC<IProps> = (props: IProps) => {
       height: `${containerHeight}px`,
       overflow: 'hidden',
     },
-    rightImage: {
+    rightImageWrapper: {
       clip: horizontal
         ? `rect(auto, auto, auto, ${containerWidth * sliderPosition}px)`
         : `rect(${containerHeight * sliderPosition}px, auto, auto, auto)`,
+      display: 'block',
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+    },
+    rightImage: {
+      /*
+      clip: horizontal
+        ? `rect(auto, auto, auto, ${containerWidth * sliderPosition}px)`
+        : `rect(${containerHeight * sliderPosition}px, auto, auto, auto)`,
+       */
       display: 'block',
       height: '100%',
       objectFit: 'cover',
@@ -241,10 +256,21 @@ const ReactCompareImage: React.FC<IProps> = (props: IProps) => {
       width: '100%',
       ...rightImageCss,
     },
-    leftImage: {
+    leftImageWrapper: {
       clip: horizontal
         ? `rect(auto, ${containerWidth * sliderPosition}px, auto, auto)`
         : `rect(auto, auto, ${containerHeight * sliderPosition}px, auto)`,
+      display: 'block',
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+    },
+    leftImage: {
+      /*
+      clip: horizontal
+        ? `rect(auto, ${containerWidth * sliderPosition}px, auto, auto)`
+        : `rect(auto, auto, ${containerHeight * sliderPosition}px, auto)`,
+       */
       display: 'block',
       height: '100%',
       objectFit: 'cover',
@@ -372,22 +398,28 @@ const ReactCompareImage: React.FC<IProps> = (props: IProps) => {
         ref={containerRef}
         data-testid="container"
       >
-        <img
-          onLoad={() => setRightImgLoaded(true)}
-          alt={rightImageAlt}
-          data-testid="right-image"
-          ref={rightImageRef}
-          src={rightImage}
-          style={styles.rightImage}
-        />
-        <img
-          onLoad={() => setLeftImgLoaded(true)}
-          alt={leftImageAlt}
-          data-testid="left-image"
-          ref={leftImageRef}
-          src={leftImage}
-          style={styles.leftImage}
-        />
+        <div style={styles.rightImageWrapper}>
+          {rightImageLayerAbove}
+          <img
+            onLoad={() => setRightImgLoaded(true)}
+            alt={rightImageAlt}
+            data-testid="right-image"
+            ref={rightImageRef}
+            src={rightImage}
+            style={styles.rightImage}
+          />
+        </div>
+        <div style={styles.leftImageWrapper}>
+          {leftImageLayerAbove}
+          <img
+            onLoad={() => setLeftImgLoaded(true)}
+            alt={leftImageAlt}
+            data-testid="left-image"
+            ref={leftImageRef}
+            src={leftImage}
+            style={styles.leftImage}
+          />
+        </div>
         <div style={styles.slider}>
           <div style={styles.line} />
           {handle ? (

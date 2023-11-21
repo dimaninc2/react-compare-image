@@ -5,7 +5,7 @@
   "main": "dist/bundle.js",
   "types": "dist/ReactCompareImage.d.ts",
   "scripts": {
-    "build": "del-cli dist/**/* && webpack --config ./webpack.production.config.js && pnpm tsc",
+    "build": "del-cli dist/**/* && webpack --config ./webpack.production.config.js && yarn tsc",
     "prepublishOnly": "pnpm test && pnpm loki:test && pnpm build",
     "test": "jest",
     "test:watch": "jest --watch",
